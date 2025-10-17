@@ -1,16 +1,17 @@
-import { Link } from "@heroui/link";
-
-import { Navbar } from "@/components/navbar";
+import NavBar from '@/components/navbar'
+import { Link } from '@heroui/link'
 
 export default function DefaultLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <div className="relative flex flex-col h-screen">
-      <Navbar />
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
+      <div className="container mx-auto max-w-7xl">
+        <NavBar />
+      </div>
+      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-12">
         {children}
       </main>
       <footer className="w-full flex items-center justify-center py-3">
@@ -25,5 +26,5 @@ export default function DefaultLayout({
         </Link>
       </footer>
     </div>
-  );
+  )
 }
