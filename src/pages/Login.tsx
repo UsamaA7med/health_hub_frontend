@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, Card } from "@heroui/react";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa6";
-import DefaultLayout from "@/layouts/default";
-import { title, subtitle } from "@/components/primitives"; 
+
 
 const Login = () => {
   const [mode, setMode] = useState("login");
@@ -13,22 +12,21 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = (data: any) => {
+    console.log("Form data:", data);
+  };
+
+  const toggleMode = () => {
+    setMode(mode === "login" ? "register" : "login");
   };
 
   return (
-    <DefaultLayout>
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <Card className="w-full max-w-md shadow-2xl rounded-2xl p-8 bg-white/90 backdrop-blur">
-          <h1
-            className="text-3xl font-bold text-center mb-4 black"
-          >
+    <div className="min-h-screen flex items-center justify-center bg-white">
+        <Card className="w-full max-w-md shadow-lg rounded-lg p-6 bg-white">
+          <h1 className="text-2xl font-bold text-center mb-4 text-gray-800">
             {mode === "login" ? "Login" : "Create an Account"}
           </h1>
-
-          
-          <p className={`${subtitle()} text-center text-gray-500 mt-3 mb-5`}>
+          <p className="text-center text-gray-500 mt-3 mb-5 text-sm">
             {mode === "login"
               ? "Please login to book an appointment."
               : "Please sign up to book an appointment."}
@@ -76,7 +74,7 @@ const Login = () => {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-b from-indigo-600 to-indigo-400 text-white py-2 rounded-full font-semibold hover:opacity-90 transition flex items-center justify-center gap-2 mt-2"
+              className="w-full bg-gradient-to-b from-blue-600 to-blue-800 text-white py-2 rounded-full font-medium hover:from-blue-700 hover:to-blue-900 transition-all mt-4"
             >
               {mode === "login" ? "Login" : "Create Account"}
             </Button>
@@ -86,15 +84,14 @@ const Login = () => {
             {mode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
             <button
               type="button"
-              onClick={() => setMode(mode === "login" ? "register" : "login")}
-              className="text-indigo-600 font-semibold hover:underline"
+              onClick={toggleMode}
+              className="text-blue-600 font-medium hover:underline"
             >
               {mode === "login" ? "Create an account" : "Login"}
             </button>
           </p>
         </Card>
       </div>
-    </DefaultLayout>
   );
 };
 
