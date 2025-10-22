@@ -8,7 +8,6 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
-  Image,
 } from '@heroui/react'
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
@@ -68,7 +67,12 @@ export default function NavBar() {
         <NavbarMenu>
           {menuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
-              <Link className="w-full" color="foreground" href="#" size="lg">
+              <Link
+                className="w-full"
+                color="foreground"
+                href={item.href}
+                size="lg"
+              >
                 {item.item}
               </Link>
             </NavbarMenuItem>
@@ -87,7 +91,12 @@ export default function NavBar() {
       </NavbarContent>
       <NavbarContent justify="end" className="hidden sm:flex">
         <NavbarItem>
-          <Button className="text-white" as={Link} color="primary" href="#">
+          <Button
+            className="text-white rounded-full"
+            as={Link}
+            color="primary"
+            href="#"
+          >
             Create account
           </Button>
         </NavbarItem>
