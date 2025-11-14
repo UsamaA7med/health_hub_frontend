@@ -3,10 +3,10 @@ import { Card, CardHeader, CardBody, Image } from '@heroui/react'
 export default function DoctorCard() {
   return (
     <Card radius="none">
-      <CardHeader className="flex-col items-center p-0">
+      <CardHeader className="flex-col items-center p-0 bg-[#EAEFFF]">
         <Image
           alt="Doctor"
-          className="w-full h-auto object-cover rounded-none bg-[#EAEFFF]"
+          className="w-full h-auto object-cover rounded-none "
           src="/doctor.png"
         />
       </CardHeader>

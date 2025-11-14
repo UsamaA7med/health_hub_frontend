@@ -1,8 +1,9 @@
 import { Button } from '@heroui/button'
 import DoctorCard from './DoctorCard'
-import { Image } from '@heroui/react'
+import { useNavigate } from 'react-router-dom'
 
 const TopDoctorsSection = () => {
+  const navigate = useNavigate()
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="flex flex-col justify-center items-center gap-3">
@@ -19,7 +20,12 @@ const TopDoctorsSection = () => {
         <DoctorCard />
         <DoctorCard />
       </div>
-      <Button className="w-[9rem] my-10 rounded-full">more</Button>
+      <Button
+        className="w-[9rem] my-10 rounded-full"
+        onPress={() => navigate('/all-doctors')}
+      >
+        more
+      </Button>
     </div>
   )
 }

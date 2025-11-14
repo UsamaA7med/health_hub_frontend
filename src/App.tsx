@@ -1,18 +1,17 @@
-import { Route, Routes } from 'react-router-dom'
-import Home from './pages/Home'
-import AllDoctors from './pages/AllDoctors'
-import About from './pages/About'
-import Contact from './pages/Contact'
+import HeroSection from '@/components/homeComponents/HeroSection'
+import SecondHero from '@/components/homeComponents/SecondHero'
+import SpecialitySection from '@/components/homeComponents/SpecialitySection'
+import TopDoctorsSection from '@/components/homeComponents/TopDoctorsSection'
 
-function App() {
+const Home = () => {
   return (
-    <Routes>
-      <Route element={<Home />} path="/" />
-      <Route element={<AllDoctors />} path="/all-doctors" />
-      <Route element={<About />} path="/about" />
-      <Route element={<Contact />} path="/contact" />
-    </Routes>
+    <div className="flex flex-col gap-20">
+      <HeroSection />
+      <SpecialitySection />
+      <TopDoctorsSection />
+      <SecondHero />
+    </div>
   )
 }
 
-export default App
+export default Home

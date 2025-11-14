@@ -11,6 +11,7 @@ import {
 } from '@heroui/react'
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 
 const menuItems = [
   { item: 'HOME', href: '/' },
@@ -59,7 +60,7 @@ export default function NavBar() {
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {menuItems.map(({ item, href }) => (
           <NavbarItem key={item} isActive={location.pathname === href}>
-            <Link color="foreground" href={href}>
+            <Link color="foreground" to={href} as={RouterLink}>
               {item}
             </Link>
           </NavbarItem>
@@ -68,9 +69,10 @@ export default function NavBar() {
           {menuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link
+                as={RouterLink}
                 className="w-full"
                 color="foreground"
-                href={item.href}
+                to={item.href}
                 size="lg"
               >
                 {item.item}
@@ -81,8 +83,9 @@ export default function NavBar() {
             <Link
               className="w-full"
               color="foreground"
-              href="/register"
+              to="/register"
               size="lg"
+              as={RouterLink}
             >
               Create account
             </Link>
@@ -93,9 +96,9 @@ export default function NavBar() {
         <NavbarItem>
           <Button
             className="text-white rounded-full"
-            as={Link}
             color="primary"
-            href="#"
+            to="/register"
+            as={RouterLink}
           >
             Create account
           </Button>

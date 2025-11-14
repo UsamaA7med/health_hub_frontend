@@ -1,19 +1,16 @@
 import NavBar from '@/components/navbar'
 import { Link } from '@heroui/link'
 import { Divider, Image } from '@heroui/react'
+import { Outlet } from 'react-router-dom'
 
-export default function DefaultLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function DefaultLayout() {
   return (
     <div className="relative flex flex-col min-h-screen">
       <div className="container mx-auto max-w-7xl">
         <NavBar />
       </div>
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-12 min-h-screen">
-        {children}
+      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-12 min-h-screen mb-10">
+        <Outlet />
       </main>
       <footer className="w-full flex pt-12 flex-col gap-10 px-6 container mx-auto max-w-7xl justify-center py-3">
         <div className="flex flex-col gap-10">
