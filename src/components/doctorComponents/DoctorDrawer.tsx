@@ -11,7 +11,11 @@ import {
 import { IoIosMenu } from 'react-icons/io'
 import { Link } from 'react-router-dom'
 
-export default function DoctorDrawer() {
+export default function DoctorDrawer({
+  handleLogout,
+}: {
+  handleLogout: () => void
+}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   return (
@@ -46,7 +50,7 @@ export default function DoctorDrawer() {
                       {item.item}
                     </Link>
                   ))}
-                  <Button color="danger" variant="solid">
+                  <Button color="danger" variant="solid" onPress={handleLogout}>
                     Logout
                   </Button>
                 </div>

@@ -1,5 +1,10 @@
+import { useAppointment } from '@/store/useAppointment'
+import calculateAge from '@/utils/calculateAge'
+import formatDate from '@/utils/formatDate'
 import {
+  addToast,
   Avatar,
+  Image,
   Table,
   TableBody,
   TableCell,
@@ -9,6 +14,71 @@ import {
 } from '@heroui/react'
 
 const DoctorAppointments = () => {
+  const {
+    doctorAppointments,
+    doctorCancelAppointment,
+    doctorApproveAppointment,
+  } = useAppointment()
+  const handleCancel = async (id: string) => {
+    try {
+      const res = await doctorCancelAppointment(id)
+      if (res.success) {
+        addToast({
+          title: 'Success',
+          color: 'success',
+          description: res.message,
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        })
+      } else {
+        addToast({
+          title: 'Error',
+          color: 'danger',
+          description: res.message,
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        })
+      }
+    } catch (error) {
+      addToast({
+        title: 'Error',
+        color: 'danger',
+        description: 'Something went wrong',
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      })
+    }
+  }
+  const handleApprove = async (id: string) => {
+    try {
+      const res = await doctorApproveAppointment(id)
+      if (res.success) {
+        addToast({
+          title: 'Success',
+          color: 'success',
+          description: res.message,
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        })
+      } else {
+        addToast({
+          title: 'Error',
+          color: 'danger',
+          description: res.message,
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        })
+      }
+    } catch (error) {
+      addToast({
+        title: 'Error',
+        color: 'danger',
+        description: 'Something went wrong',
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      })
+    }
+  }
   return (
     <div className="flex flex-col gap-5">
       <p className="font-bold">All Appointments</p>
@@ -23,54 +93,46 @@ const DoctorAppointments = () => {
           <TableColumn>Actions</TableColumn>
         </TableHeader>
         <TableBody>
-          <TableRow key="1">
-            <TableCell>1</TableCell>
-            <TableCell>CEO</TableCell>
-            <TableCell>Active</TableCell>
-            <TableCell>2023-01-01 12:00:00</TableCell>
-            <TableCell className="flex gap-2 items-center">
-              <Avatar size="sm" src="/doc.png" />
-              John Doe
-            </TableCell>
-            <TableCell>$100</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-          <TableRow key="2">
-            <TableCell>2</TableCell>
-            <TableCell>CEO</TableCell>
-            <TableCell>Active</TableCell>
-            <TableCell>2023-01-01 12:00:00</TableCell>
-            <TableCell className="flex gap-2 items-center">
-              <Avatar size="sm" src="/doc.png" />
-              John Doe
-            </TableCell>
-            <TableCell>$100</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-          <TableRow key="3">
-            <TableCell>3</TableCell>
-            <TableCell>CEO</TableCell>
-            <TableCell>Active</TableCell>
-            <TableCell>2023-01-01 12:00:00</TableCell>
-            <TableCell className="flex gap-2 items-center">
-              <Avatar size="sm" src="/doc.png" />
-              John Doe
-            </TableCell>
-            <TableCell>$100</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-          <TableRow key="4">
-            <TableCell>4</TableCell>
-            <TableCell>CEO</TableCell>
-            <TableCell>Active</TableCell>
-            <TableCell>2023-01-01 12:00:00</TableCell>
-            <TableCell className="flex gap-2 items-center">
-              <Avatar size="sm" src="/doc.png" />
-              John Doe
-            </TableCell>
-            <TableCell>$100</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
+          {(doctorAppointments ?? []).map((appointment, i) => (
+            <TableRow key={i}>
+              <TableCell>{i}</TableCell>
+              <TableCell className="flex gap-2 items-center">
+                <Avatar size="sm" src={appointment.user.profileImage.url} />
+                {appointment.user.fullName}
+              </TableCell>
+              <TableCell>
+                <div className="border px-3 py-1 rounded-full w-fit ">
+                  {appointment.paymentMethod.toUpperCase()}
+                </div>
+              </TableCell>
+              <TableCell>
+                {calculateAge(appointment.user.healthProfile.birthDate)}
+              </TableCell>
+              <TableCell>
+                {formatDate(appointment.date)} {appointment.time}
+              </TableCell>
+              <TableCell>${appointment.doctor.fees}</TableCell>
+              <TableCell>
+                {(appointment.status === 'pending' && (
+                  <div className="flex gap-2 items-center">
+                    <Image
+                      src="/cancel_icon.png"
+                      className="w-10 h-10 rounded-none cursor-pointer"
+                      onClick={() => handleCancel(appointment._id)}
+                    />
+                    <Image
+                      src="/tick_icon.png"
+                      className="w-10 h-10 rounded-none cursor-pointer"
+                      onClick={() => handleApprove(appointment._id)}
+                    />
+                  </div>
+                )) ||
+                  (appointment.status === 'approved' && (
+                    <div className="text-green-700">Completed</div>
+                  )) || <div className="text-red-700">Cancelled</div>}
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

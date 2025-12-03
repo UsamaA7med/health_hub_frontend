@@ -1,3 +1,5 @@
+import { useAppointment } from '@/store/useAppointment'
+import formatDate from '@/utils/formatDate'
 import {
   Avatar,
   Table,
@@ -9,6 +11,8 @@ import {
 } from '@heroui/react'
 
 const AdminAppointments = () => {
+  const { allAppointments } = useAppointment()
+  console.log(allAppointments)
   return (
     <div className="flex flex-col gap-5">
       <p className="font-bold">All Appointments</p>
@@ -22,50 +26,24 @@ const AdminAppointments = () => {
           <TableColumn>Fees</TableColumn>
         </TableHeader>
         <TableBody>
-          <TableRow key="1">
-            <TableCell>1</TableCell>
-            <TableCell>CEO</TableCell>
-            <TableCell>Active</TableCell>
-            <TableCell>2023-01-01 12:00:00</TableCell>
-            <TableCell className="flex gap-2 items-center">
-              <Avatar size="sm" src="/doc.png" />
-              John Doe
-            </TableCell>
-            <TableCell>$100</TableCell>
-          </TableRow>
-          <TableRow key="2">
-            <TableCell>2</TableCell>
-            <TableCell>CEO</TableCell>
-            <TableCell>Active</TableCell>
-            <TableCell>2023-01-01 12:00:00</TableCell>
-            <TableCell className="flex gap-2 items-center">
-              <Avatar size="sm" src="/doc.png" />
-              John Doe
-            </TableCell>
-            <TableCell>$100</TableCell>
-          </TableRow>
-          <TableRow key="3">
-            <TableCell>3</TableCell>
-            <TableCell>CEO</TableCell>
-            <TableCell>Active</TableCell>
-            <TableCell>2023-01-01 12:00:00</TableCell>
-            <TableCell className="flex gap-2 items-center">
-              <Avatar size="sm" src="/doc.png" />
-              John Doe
-            </TableCell>
-            <TableCell>$100</TableCell>
-          </TableRow>
-          <TableRow key="4">
-            <TableCell>4</TableCell>
-            <TableCell>CEO</TableCell>
-            <TableCell>Active</TableCell>
-            <TableCell>2023-01-01 12:00:00</TableCell>
-            <TableCell className="flex gap-2 items-center">
-              <Avatar size="sm" src="/doc.png" />
-              John Doe
-            </TableCell>
-            <TableCell>$100</TableCell>
-          </TableRow>
+          {(allAppointments ?? []).map((appointment, i) => (
+            <TableRow key={i}>
+              <TableCell>{i + 1}</TableCell>
+              <TableCell className="flex gap-2 items-center">
+                <Avatar size="sm" src={appointment.user.profileImage.url} />
+                {appointment.user.fullName}
+              </TableCell>
+              <TableCell>{appointment.doctor.speciality}</TableCell>
+              <TableCell>
+                {formatDate(appointment.date)} {appointment.time}
+              </TableCell>
+              <TableCell className="flex gap-2 items-center">
+                <Avatar size="sm" src={appointment.doctor.image.url} />
+                {appointment.doctor.name}
+              </TableCell>
+              <TableCell>${appointment.doctor.fees}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

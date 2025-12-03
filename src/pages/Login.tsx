@@ -1,8 +1,17 @@
-import { Button, Card, CardBody, Form, Input } from '@heroui/react'
+import {
+  addToast,
+  Button,
+  Card,
+  CardBody,
+  Form,
+  Input,
+  Spinner,
+} from '@heroui/react'
 import { Link } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { loginSchema, TLoginSchema } from '@/validations/loginValidation'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useUser } from '@/store/useUser'
 
 const Login = () => {
   const {
@@ -12,7 +21,27 @@ const Login = () => {
   } = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
   })
-  const onSubmit: SubmitHandler<TLoginSchema> = (data) => console.log(data)
+  const { login, isLoggingIn } = useUser()
+  const onSubmit: SubmitHandler<TLoginSchema> = async (data) => {
+    try {
+      const res = await login(data)
+      addToast({
+        title: res.success ? 'Success' : 'Error',
+        color: res.success ? 'success' : 'danger',
+        description: res.message,
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      })
+    } catch (error) {
+      addToast({
+        title: 'Error',
+        color: 'danger',
+        description: 'Something went wrong',
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      })
+    }
+  }
   return (
     <div className="flex justify-center">
       <div className="w-1/3 min-w-[300px]">
@@ -51,6 +80,8 @@ const Login = () => {
                   className="w-full  text-white"
                   color="primary"
                   type="submit"
+                  isLoading={isLoggingIn}
+                  isDisabled={isLoggingIn}
                 >
                   Login
                 </Button>

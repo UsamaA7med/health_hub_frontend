@@ -1,6 +1,7 @@
 import type { NavigateOptions } from 'react-router-dom'
 
 import { HeroUIProvider } from '@heroui/system'
+import { ToastProvider } from '@heroui/react'
 
 declare module '@react-types/shared' {
   interface RouterConfig {
@@ -9,5 +10,10 @@ declare module '@react-types/shared' {
 }
 
 export function Provider({ children }: { children: React.ReactNode }) {
-  return <HeroUIProvider>{children}</HeroUIProvider>
+  return (
+    <HeroUIProvider>
+      <ToastProvider placement="top-center" />
+      {children}
+    </HeroUIProvider>
+  )
 }

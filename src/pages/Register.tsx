@@ -1,8 +1,9 @@
+import { useUser } from '@/store/useUser'
 import {
   registerSchema,
   TRegisterSchema,
 } from '@/validations/registerValidation'
-import { Button, Card, CardBody, Form, Input } from '@heroui/react'
+import { addToast, Button, Card, CardBody, Form, Input } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
@@ -15,7 +16,27 @@ const Register = () => {
   } = useForm<TRegisterSchema>({
     resolver: zodResolver(registerSchema),
   })
-  const onSubmit: SubmitHandler<TRegisterSchema> = (data) => console.log(data)
+  const { register: registerUser, isRegistering } = useUser()
+  const onSubmit: SubmitHandler<TRegisterSchema> = async (data) => {
+    try {
+      const res = await registerUser(data)
+      addToast({
+        title: res.success ? 'Success' : 'Error',
+        color: res.success ? 'success' : 'danger',
+        description: res.message,
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      })
+    } catch (error) {
+      addToast({
+        title: 'Error',
+        color: 'danger',
+        description: 'Something went wrong',
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      })
+    }
+  }
   return (
     <div className="flex justify-center">
       <div className="w-1/3 min-w-[300px]">
@@ -64,6 +85,8 @@ const Register = () => {
                   className="w-full  text-white "
                   color="primary"
                   type="submit"
+                  isLoading={isRegistering}
+                  isDisabled={isRegistering}
                 >
                   Create account
                 </Button>

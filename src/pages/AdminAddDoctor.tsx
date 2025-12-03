@@ -1,8 +1,10 @@
+import { useAdmin } from '@/store/useAdmin'
 import {
   addDoctorSchema,
   TAddDoctorSchema,
 } from '@/validations/addDoctorValidation'
 import {
+  addToast,
   Avatar,
   Button,
   Input,
@@ -14,6 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Form } from 'react-router-dom'
+import { spicialities } from '@/dummyData/dummy'
 
 const AdminAddDoctor = () => {
   const {
@@ -21,6 +24,7 @@ const AdminAddDoctor = () => {
     handleSubmit,
     control,
     resetField,
+    reset,
     formState: { errors },
   } = useForm<TAddDoctorSchema>({
     resolver: zodResolver(addDoctorSchema),
@@ -34,10 +38,38 @@ const AdminAddDoctor = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const onSubmit: SubmitHandler<TAddDoctorSchema> = (data) => {
-    console.log('Form Data:', data)
-    if (data.image && data.image.length > 0) {
-      console.log('Uploaded file:', data.image[0])
+  const { createDoctor, isCreatingDoctor } = useAdmin()
+
+  const onSubmit: SubmitHandler<TAddDoctorSchema> = async (data) => {
+    try {
+      const res = await createDoctor(data)
+      if (res.success) {
+        addToast({
+          title: 'Success',
+          color: 'success',
+          description: res.message,
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        })
+        reset()
+        setImageUrl(null)
+      } else {
+        addToast({
+          title: 'Error',
+          color: 'danger',
+          description: res.message,
+          timeout: 3000,
+          shouldShowTimeoutProgress: true,
+        })
+      }
+    } catch (error) {
+      addToast({
+        title: 'Error',
+        color: 'danger',
+        description: 'Something went wrong',
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      })
     }
   }
 
@@ -143,11 +175,11 @@ const AdminAddDoctor = () => {
                   isInvalid={!!errors.speciality}
                   errorMessage={errors.speciality?.message}
                 >
-                  <SelectItem key="ar">Argentina</SelectItem>
-                  <SelectItem key="us">United States</SelectItem>
-                  <SelectItem key="ca">Canada</SelectItem>
-                  <SelectItem key="uk">United Kingdom</SelectItem>
-                  <SelectItem key="au">Australia</SelectItem>
+                  {spicialities.map((speciality) => (
+                    <SelectItem key={speciality.name}>
+                      {speciality.name}
+                    </SelectItem>
+                  ))}
                 </Select>
               )}
             />
@@ -277,6 +309,8 @@ const AdminAddDoctor = () => {
             type="submit"
             radius="full"
             className="bg-primary text-white w-1/6 min-w-fit"
+            isLoading={isCreatingDoctor}
+            isDisabled={isCreatingDoctor}
           >
             Add doctor
           </Button>

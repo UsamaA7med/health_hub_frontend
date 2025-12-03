@@ -12,7 +12,13 @@ export const addDoctorSchema = z.object({
       'Invalid email'
     ),
   education: z.string().min(1, 'Education is required'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  password: z
+    .string()
+    .min(6)
+    .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, {
+      message:
+        'Password must be at least 6 characters long and contain at least one letter and one number',
+    }),
   addressOne: z.string().min(1, 'Address is required'),
   addressTwo: z.string().optional(),
   speciality: z.string().nonempty('Please select a speciality'),

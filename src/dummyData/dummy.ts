@@ -56,3 +56,36 @@ export const doctorDashboardAnalytics = [
     icon: 'patients_icon.png',
   },
 ]
+
+export const spicialities = [
+  {
+    name: 'General physician',
+    key: 1,
+    image: '/General_physician.png',
+  },
+  {
+    name: 'Gynecologist',
+    key: 2,
+    image: '/Gynecologist.png',
+  },
+  {
+    name: 'Dermatologist',
+    key: 3,
+    image: '/Dermatologist.png',
+  },
+  {
+    name: 'Pediatricians',
+    key: 4,
+    image: '/Pediatricians.png',
+  },
+  {
+    name: 'Neurologist',
+    key: 5,
+    image: '/Neurologist.png',
+  },
+  {
+    name: 'Gastroenterologist',
+    key: 6,
+    image: '/Gastroenterologist.png',
+  },
+]

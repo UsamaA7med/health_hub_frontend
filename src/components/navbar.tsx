@@ -1,3 +1,4 @@
+import { useUser } from '@/store/useUser'
 import {
   Navbar,
   NavbarBrand,
@@ -8,9 +9,15 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
+  Dropdown,
+  DropdownTrigger,
+  Avatar,
+  DropdownMenu,
+  DropdownItem,
+  addToast,
 } from '@heroui/react'
 import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Link as RouterLink } from 'react-router-dom'
 
 const menuItems = [
@@ -23,6 +30,28 @@ const menuItems = [
 export default function NavBar() {
   const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { isAuthenticated, user, logout } = useUser()
+  const navigate = useNavigate()
+  const handleLogout = async () => {
+    try {
+      const res = await logout()
+      addToast({
+        title: res.success ? 'Success' : 'Error',
+        color: res.success ? 'success' : 'danger',
+        description: res.message,
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      })
+    } catch (error) {
+      addToast({
+        title: 'Error',
+        color: 'danger',
+        description: 'Something went wrong',
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+      })
+    }
+  }
   return (
     <Navbar
       isBordered
@@ -79,30 +108,81 @@ export default function NavBar() {
               </Link>
             </NavbarMenuItem>
           ))}
-          <NavbarMenuItem key={'create-account'}>
-            <Link
-              className="w-full"
-              color="foreground"
-              to="/register"
-              size="lg"
-              as={RouterLink}
-            >
-              Create account
-            </Link>
-          </NavbarMenuItem>
+          {isAuthenticated ? (
+            <>
+              <NavbarMenuItem key={`profile`}>
+                <Link
+                  as={RouterLink}
+                  className="w-full"
+                  color="foreground"
+                  to={'/profile'}
+                  size="lg"
+                >
+                  PROFILE
+                </Link>
+              </NavbarMenuItem>
+              <NavbarMenuItem key={`logout`}>
+                <Button color="danger" onPress={handleLogout}>
+                  Logout
+                </Button>
+              </NavbarMenuItem>
+            </>
+          ) : (
+            <NavbarMenuItem key={`register`}>
+              <Link
+                as={RouterLink}
+                className="w-full"
+                color="foreground"
+                to={'/register'}
+                size="lg"
+              >
+                CREATE ACCOUNT
+              </Link>
+            </NavbarMenuItem>
+          )}
         </NavbarMenu>
       </NavbarContent>
       <NavbarContent justify="end" className="hidden sm:flex">
-        <NavbarItem>
+        {!isAuthenticated ? (
           <Button
-            className="text-white rounded-full"
-            color="primary"
-            to="/register"
             as={RouterLink}
+            to="/register"
+            color="primary"
+            className="text-white rounded-full"
           >
-            Create account
+            Create Account
           </Button>
-        </NavbarItem>
+        ) : (
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Avatar
+                as="button"
+                className="transition-transform"
+                color="secondary"
+                name="Jason Hughes"
+                size="sm"
+                src={user?.profileImage.url}
+              />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem
+                key="profile"
+                onPress={() => navigate('/my-profile')}
+              >
+                My Profile
+              </DropdownItem>
+              <DropdownItem
+                key="appointments"
+                onPress={() => navigate('/my-appointments')}
+              >
+                My Appointments
+              </DropdownItem>
+              <DropdownItem key="logout" color="danger" onPress={handleLogout}>
+                Log Out
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        )}
       </NavbarContent>
     </Navbar>
   )

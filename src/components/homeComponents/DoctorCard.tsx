@@ -1,23 +1,44 @@
 import { Card, CardHeader, CardBody, Image } from '@heroui/react'
+import { motion } from 'motion/react'
 
-export default function DoctorCard() {
+const MotionCardHeader = motion(CardHeader)
+const MotionCard = motion(Card)
+export default function DoctorCard({
+  image,
+  name,
+  speciality,
+  available,
+}: {
+  image: string
+  name: string
+  speciality: string
+  available?: boolean
+}) {
   return (
-    <Card radius="none">
-      <CardHeader className="flex-col items-center p-0 bg-[#EAEFFF]">
+    <MotionCard
+      radius="none"
+      whileHover={{ y: -10, cursor: 'pointer' }}
+      transition={{ duration: 0.1 }}
+    >
+      <MotionCardHeader
+        className="flex-col items-center p-0 bg-[#EAEFFF]"
+        whileHover={{ backgroundColor: '#5F6FFF' }}
+        transition={{ duration: 0.5 }}
+      >
         <Image
           alt="Doctor"
-          className="w-full h-auto object-cover rounded-none "
-          src="/doctor.png"
+          className="w-full h-[250px] object-cover rounded-none "
+          src={image}
         />
-      </CardHeader>
+      </MotionCardHeader>
       <CardBody className="overflow-visible p-3">
         <p className="text-tiny text-green-600 flex items-center gap-1 mb-1">
           <span className="w-2 h-2 bg-green-600 rounded-full inline-block" />
-          Available
+          {available ? 'Available' : 'Unavailable'}
         </p>
-        <h4 className="font-bold text-large">Dr. Richard James</h4>
-        <small className="text-default-500">General Physician</small>
+        <h4 className="font-bold text-large"> {name}</h4>
+        <small className="text-default-500">{speciality}</small>
       </CardBody>
-    </Card>
+    </MotionCard>
   )
 }

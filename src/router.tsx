@@ -17,10 +17,19 @@ import DoctorDashboard from './pages/DoctorDashboard'
 import DoctorAppointments from './pages/DoctorAppointments'
 import DoctorProfile from './pages/DoctorProfile'
 import PaitentCompleteProfile from './pages/PaitentCompleteProfile'
+import CheckAuth from './CheckAuth'
+import ScrollToTop from './ScrollToTop'
+import MyProfile from './pages/MyProfile'
+import MyAppointments from './pages/MyAppointments'
 const Router = createBrowserRouter([
   {
     path: '/',
-    element: <DefaultLayout />,
+    element: (
+      <CheckAuth>
+        <ScrollToTop />
+        <DefaultLayout />
+      </CheckAuth>
+    ),
     children: [
       {
         index: true,
@@ -50,11 +59,24 @@ const Router = createBrowserRouter([
         path: '/doctor/:id',
         element: <Doctor />,
       },
+      {
+        path: '/my-profile',
+        element: <MyProfile />,
+      },
+      {
+        path: '/my-appointments',
+        element: <MyAppointments />,
+      },
     ],
   },
   {
     path: '/admin-panel',
-    element: <AdminLayout />,
+    element: (
+      <CheckAuth>
+        <ScrollToTop />
+        <AdminLayout />
+      </CheckAuth>
+    ),
     children: [
       {
         index: true,
@@ -76,7 +98,12 @@ const Router = createBrowserRouter([
   },
   {
     path: '/doctor-panel',
-    element: <DoctorLayout />,
+    element: (
+      <CheckAuth>
+        <ScrollToTop />
+        <DoctorLayout />
+      </CheckAuth>
+    ),
     children: [
       {
         index: true,
@@ -93,8 +120,12 @@ const Router = createBrowserRouter([
     ],
   },
   {
-    path: '/medical-history',
-    element: <PaitentCompleteProfile />,
+    path: '/complete-profile',
+    element: (
+      <CheckAuth>
+        <PaitentCompleteProfile />
+      </CheckAuth>
+    ),
   },
 ])
 

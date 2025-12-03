@@ -1,65 +1,71 @@
 import DoctorCard from '@/components/homeComponents/DoctorCard'
+import { spicialities } from '@/dummyData/dummy'
+import { useAdmin } from '@/store/useAdmin'
+import { TAddDoctorSchema } from '@/validations/addDoctorValidation'
 import { Button } from '@heroui/button'
-import { useState } from 'react'
-
-const cateogries = [
-  {
-    name: 'General physician',
-    key: 1,
-  },
-  {
-    name: 'Gynecologist',
-    key: 2,
-  },
-  {
-    name: 'Dermatologist',
-    key: 3,
-  },
-  {
-    name: 'Pediatricians',
-    key: 4,
-  },
-  {
-    name: 'Cardiologists',
-    key: 5,
-  },
-  {
-    name: 'Psychiatrists',
-    key: 6,
-  },
-]
+import { useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 const AllDoctors = () => {
-  const [active, setActive] = useState(0)
-  const onChangeCategory = (key: number) => {
-    setActive(key)
+  const { getFilteredDoctors } = useAdmin()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [active, setActive] = useState<string | null>(
+    searchParams.get('speciality') || null
+  )
+  const [filteredDoctors, setFilteredDoctors] = useState<
+    (TAddDoctorSchema & { available: boolean; _id: string })[] | null
+  >(null)
+
+  const onChangeCategory = (name: string) => {
+    if (name === searchParams.get('speciality')) {
+      searchParams.delete('speciality')
+      setSearchParams(searchParams)
+      setActive('all')
+      return
+    }
+    setActive(name)
+    searchParams.set('speciality', name)
+    setSearchParams(searchParams)
   }
+  useEffect(() => {
+    FilteredDoctors(active || 'all')
+  }, [active])
+
+  const FilteredDoctors = async (query: string) => {
+    const res = await getFilteredDoctors(query)
+    setFilteredDoctors(res.data)
+  }
+  const navigate = useNavigate()
   return (
     <div className="flex flex-col gap-10">
       <p className="text-[#4B5563] text-sm">
         Browse through the doctors specialist.
       </p>
-      <div className="grid gird-cols-1 md:grid-cols-6 gap-5">
+      <div className="grid gird-cols-1 md:grid-cols-5 gap-5">
         <div className="flex flex-col gap-3 col-span-1">
-          {cateogries.map((category) => (
+          {spicialities.map((spiciality) => (
             <Button
-              key={category.key}
+              key={spiciality.key}
               onPress={() => {
-                onChangeCategory(category.key)
+                onChangeCategory(spiciality.name)
               }}
-              variant={active === category.key ? 'solid' : 'bordered'}
+              variant={active === spiciality.name ? 'solid' : 'bordered'}
             >
-              {category.name}
+              {spiciality.name}
             </Button>
           ))}
         </div>
-        <div className="col-span-5 grid grid-cols-1 md:grid-cols-5 gap-5">
-          <DoctorCard />
-          <DoctorCard />
-          <DoctorCard />
-          <DoctorCard />
-          <DoctorCard />
-          <DoctorCard />
+        <div className="col-span-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          {filteredDoctors?.map((i) => (
+            <div key={i._id} onClick={() => navigate('/doctor/' + i._id)}>
+              <DoctorCard
+                name={i.name}
+                image={i.image.url}
+                speciality={i.speciality}
+                available={i.available}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>
