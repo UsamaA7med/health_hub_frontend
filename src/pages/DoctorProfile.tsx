@@ -11,7 +11,6 @@ const DoctorProfile = () => {
   const [addressOne, setAddressOne] = useState(user?.addressOne)
   const [addressTwo, setAddressTwo] = useState(user?.addressTwo)
   const [available, setAvailable] = useState(user?.available)
-  console.log(user)
   const handleUpdateDoctorProfile = async () => {
     if (edit) {
       setEdit(false)
@@ -19,7 +18,6 @@ const DoctorProfile = () => {
     }
     try {
       const res = await updateDoctor({
-        id: user?._id!,
         fees,
         about,
         addressOne,

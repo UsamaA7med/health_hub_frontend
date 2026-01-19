@@ -2,7 +2,6 @@ import { create } from 'zustand'
 import axios, { isAxiosError } from 'axios'
 import { TAddDoctorSchema } from '@/validations/addDoctorValidation'
 import { TCompleteProfile } from '@/validations/completeProfileValidation'
-import { TUpdateUserSchema } from '@/validations/updateUserValidation'
 
 interface UserStore {
   user:
@@ -36,7 +35,7 @@ interface UserStore {
   }) => Promise<{ message: string; success: boolean }>
   checkAuth: () => Promise<void>
   completeProfile: (
-    user: TCompleteProfile & { id: string }
+    user: TCompleteProfile
   ) => Promise<{ message: string; success: boolean }>
   updateDoctor: (data: {
     about?: string
@@ -44,7 +43,6 @@ interface UserStore {
     addressTwo?: string
     addressOne?: string
     available?: boolean
-    id: string
   }) => Promise<{ message: string; success: boolean }>
   updateProfile: (
     data: FormData
@@ -190,7 +188,7 @@ export const useUser = create<UserStore>((set) => ({
     try {
       set({ isCompletingProfile: true })
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/healthProfile/complete/${data.id}`,
+        `${import.meta.env.VITE_API_URL}/api/healthProfile/complete`,
         data,
         {
           withCredentials: true,
@@ -225,7 +223,7 @@ export const useUser = create<UserStore>((set) => ({
     try {
       set({ isUpdatingDoctorProfile: true })
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/doctor/update/${data.id}`,
+        `${import.meta.env.VITE_API_URL}/api/doctor/update`,
         data,
         {
           withCredentials: true,

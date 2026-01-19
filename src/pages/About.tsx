@@ -1,4 +1,3 @@
-import DefaultLayout from '@/layouts/default'
 import { Divider, Image } from '@heroui/react'
 
 const About = () => {

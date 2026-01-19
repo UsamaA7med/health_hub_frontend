@@ -24,6 +24,7 @@ const chronicConditions = [
   { name: 'Hypertension', value: 'hypertension' },
   { name: 'Heart Disease', value: 'heart-disease' },
   { name: 'Asthma', value: 'asthma' },
+  { name: 'None', value: 'none' },
 ]
 
 const PaitentCompleteProfile = () => {
@@ -38,29 +39,17 @@ const PaitentCompleteProfile = () => {
     formState: { errors },
   } = useForm<TCompleteProfile>({
     resolver: zodResolver(completeProfileSchema),
-    defaultValues: {
-      birthDate: '',
-      gender: undefined,
-      lifeStyle: undefined,
-      chronicConditions: [],
-      phone: '',
-      allergies: '',
-      pastSurgeries: '',
-      familyHistory: '',
-    },
   })
 
   const selectedLifeStyle = watch('lifeStyle')
 
-  const { completeProfile, isCompletingProfile, user, logout } = useUser()
+  const { completeProfile, isCompletingProfile, logout } = useUser()
 
   const onSubmit = async (data: TCompleteProfile) => {
-    console.log(data)
     try {
       const res = await completeProfile({
         ...data,
         chronicConditions: chronicCondition,
-        id: user?._id!,
       })
       addToast({
         title: res.success ? 'Success' : 'Error',
@@ -69,7 +58,7 @@ const PaitentCompleteProfile = () => {
         timeout: 3000,
         shouldShowTimeoutProgress: true,
       })
-    } catch (error) {
+    } catch {
       addToast({
         title: 'Error',
         color: 'danger',
@@ -79,6 +68,7 @@ const PaitentCompleteProfile = () => {
       })
     }
   }
+
   const handleLogout = async () => {
     try {
       const res = await logout()
@@ -89,7 +79,7 @@ const PaitentCompleteProfile = () => {
         timeout: 3000,
         shouldShowTimeoutProgress: true,
       })
-    } catch (error) {
+    } catch {
       addToast({
         title: 'Error',
         color: 'danger',
@@ -102,20 +92,7 @@ const PaitentCompleteProfile = () => {
 
   return (
     <div className="bg-[#F8F9FD] min-h-screen flex justify-center p-4">
-      <div
-        className="
-    w-full
-    max-w-2xl
-    bg-white
-    shadow
-    rounded-xl
-    p-6
-    md:p-10
-    flex
-    flex-col
-    gap-6
-  "
-      >
+      <div className="w-full max-w-2xl bg-white shadow rounded-xl p-6 md:p-10 flex flex-col gap-6">
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-1 items-center text-center">
             <h1 className="text-xl md:text-2xl font-bold">My Health Profile</h1>
@@ -128,46 +105,57 @@ const PaitentCompleteProfile = () => {
             <p className="font-bold text-[#4B5563]">Personal information</p>
             <Divider />
 
-            <Controller
-              name="birthDate"
-              control={control}
-              render={({ field }) => (
-                <DateInput
-                  label={'Birth date'}
-                  labelPlacement="outside"
-                  placeholderValue={new CalendarDate(1995, 11, 6)}
-                  onChange={(value) => field.onChange(value?.toString())}
-                  isInvalid={!!errors.birthDate}
-                  errorMessage={errors.birthDate?.message}
-                />
-              )}
-            />
-            <div className="flex flex-col md:flex-row gap-4">
+            <div>
               <Controller
-                name="gender"
+                name="birthDate"
                 control={control}
                 render={({ field }) => (
-                  <Select
-                    label={'Gender'}
+                  <DateInput
+                    label="Birth date"
                     labelPlacement="outside"
-                    placeholder="e.g. Male"
-                    selectedKeys={field.value ? [field.value] : []}
-                    onSelectionChange={(keys) => field.onChange([...keys][0])}
-                    isInvalid={!!errors.gender}
-                    errorMessage={errors.gender?.message}
-                    className="w-full"
-                  >
-                    <SelectItem key="male">Male</SelectItem>
-                    <SelectItem key="female">Female</SelectItem>
-                  </Select>
+                    placeholderValue={new CalendarDate(1995, 11, 6)}
+                    onChange={(value) => field.onChange(value?.toString())}
+                    isInvalid={!!errors.birthDate}
+                  />
                 )}
               />
+              {errors.birthDate && (
+                <p className="text-red-500 text-sm">Birth date is required</p>
+              )}
+            </div>
+
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="w-full">
+                <Controller
+                  name="gender"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      label="Gender"
+                      labelPlacement="outside"
+                      placeholder="e.g. Male"
+                      selectedKeys={field.value ? [field.value] : []}
+                      onSelectionChange={(keys) => field.onChange([...keys][0])}
+                      isInvalid={!!errors.gender}
+                      className="w-full"
+                    >
+                      <SelectItem key="male">Male</SelectItem>
+                      <SelectItem key="female">Female</SelectItem>
+                    </Select>
+                  )}
+                />
+                {errors.gender && (
+                  <p className="text-red-500 text-sm">Gender is required</p>
+                )}
+              </div>
 
               <Input
                 placeholder="e.g. 123456789"
-                label={'Phone number'}
+                label="Phone number"
                 type="number"
                 {...register('phone')}
+                isInvalid={!!errors.phone}
+                errorMessage={errors.phone?.message}
                 labelPlacement="outside"
                 className="w-full"
               />
@@ -179,6 +167,9 @@ const PaitentCompleteProfile = () => {
             <Divider />
 
             <p className="font-bold text-[#4B5563]">Chronic Conditions</p>
+
+            <input type="hidden" {...register('chronicConditions')} />
+
             <div className="flex flex-wrap text-sm gap-3">
               {chronicConditions.map((item) => (
                 <p
@@ -187,31 +178,46 @@ const PaitentCompleteProfile = () => {
                     chronicCondition.includes(item.name) &&
                     'bg-primary text-white'
                   }`}
-                  onClick={() =>
-                    setChronicCondition((prev) =>
-                      prev.includes(item.name)
-                        ? prev.filter((i) => i !== item.name)
-                        : [...prev, item.name]
-                    )
-                  }
+                  onClick={() => {
+                    const updated = chronicCondition.includes(item.name)
+                      ? chronicCondition.filter((i) => i !== item.name)
+                      : [...chronicCondition, item.name]
+
+                    setChronicCondition(updated)
+
+                    setValue('chronicConditions', updated, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    })
+                  }}
                 >
                   {item.name}
                 </p>
               ))}
             </div>
 
+            {errors.chronicConditions && (
+              <p className="text-red-500 text-sm">
+                Please select at least one chronic condition
+              </p>
+            )}
+
             <div className="flex flex-col md:flex-row gap-4">
               <Input
                 placeholder="e.g. Penicillin, Peanuts"
-                label={'Allergies'}
+                label="Allergies"
                 {...register('allergies')}
+                isInvalid={!!errors.allergies}
+                errorMessage={errors.allergies?.message}
                 labelPlacement="outside"
                 className="w-full"
               />
               <Input
                 placeholder="e.g. Appendectomy, Heart Surgery"
-                label={'Surgeries'}
+                label="Surgeries"
                 {...register('pastSurgeries')}
+                isInvalid={!!errors.pastSurgeries}
+                errorMessage={errors.pastSurgeries?.message}
                 labelPlacement="outside"
                 className="w-full"
               />
@@ -219,8 +225,10 @@ const PaitentCompleteProfile = () => {
 
             <Input
               placeholder="e.g. Father - Heart Disease"
-              label={'Family History'}
+              label="Family History"
               {...register('familyHistory')}
+              isInvalid={!!errors.familyHistory}
+              errorMessage={errors.familyHistory?.message}
               labelPlacement="outside"
             />
 
@@ -245,7 +253,7 @@ const PaitentCompleteProfile = () => {
             </div>
 
             {errors.lifeStyle && (
-              <p className="text-red-500 text-sm">{errors.lifeStyle.message}</p>
+              <p className="text-red-500 text-sm">Lifestyle is required</p>
             )}
           </div>
 

@@ -1,8 +1,10 @@
 import { Button } from '@heroui/button'
 import { Image } from '@heroui/react'
 import { FaArrowRight } from 'react-icons/fa6'
+import { useNavigate } from 'react-router-dom'
 
 const HeroSection = () => {
+  const navigate = useNavigate()
   return (
     <div className="relative w-full h-[600px] flex items-end justify-between">
       <img
@@ -25,6 +27,7 @@ const HeroSection = () => {
           <Button
             className="w-fit bg-white rounded-full"
             endContent={<FaArrowRight />}
+            onPress={() => navigate('/all-doctors')}
           >
             Book appointment
           </Button>
