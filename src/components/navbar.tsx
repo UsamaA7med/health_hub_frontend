@@ -115,7 +115,7 @@ export default function NavBar() {
                   as={RouterLink}
                   className="w-full"
                   color="foreground"
-                  to={'/profile'}
+                  to={'/my-profile'}
                   size="lg"
                 >
                   PROFILE
