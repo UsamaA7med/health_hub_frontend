@@ -103,6 +103,7 @@ export default function NavBar() {
                 color="foreground"
                 to={item.href}
                 size="lg"
+                onClick={() => setIsMenuOpen(false)}
               >
                 {item.item}
               </Link>
@@ -117,6 +118,7 @@ export default function NavBar() {
                   color="foreground"
                   to={'/my-profile'}
                   size="lg"
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   PROFILE
                 </Link>
@@ -135,6 +137,7 @@ export default function NavBar() {
                 color="foreground"
                 to={'/register'}
                 size="lg"
+                onClick={() => setIsMenuOpen(false)}
               >
                 CREATE ACCOUNT
               </Link>

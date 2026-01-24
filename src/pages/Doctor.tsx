@@ -132,7 +132,7 @@ const Doctor = () => {
 
   return (
     <div className="flex flex-col gap-20">
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-5 items-stretch">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-6 items-stretch">
         <div className="col-span-1 w-full">
           <Image
             alt="Doctor"
@@ -141,7 +141,7 @@ const Doctor = () => {
           />
         </div>
 
-        <div className="col-span-4 flex flex-col gap-10">
+        <div className="col-span-5 flex flex-col gap-10">
           <Card className="min-h-[250px]">
             <CardBody>
               <div className="p-5 flex flex-col gap-3">
@@ -242,7 +242,7 @@ const Doctor = () => {
           Simply browse through our extensive list of trusted doctors.
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5 mt-10">
           {relatedDoctors
             ?.filter((i) => i._id !== id)
             .map((doctor) => (

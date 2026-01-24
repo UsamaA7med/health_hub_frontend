@@ -42,7 +42,7 @@ const AllDoctors = () => {
         Browse through the doctors specialist.
       </p>
       <div className="grid gird-cols-1 md:grid-cols-5 gap-5">
-        <div className="flex flex-col gap-3 col-span-1">
+        <div className="gap-5 grid grid-cols-2 md:grid-cols-1 h-min md:col-span-1">
           {spicialities.map((spiciality) => (
             <Button
               key={spiciality.key}
