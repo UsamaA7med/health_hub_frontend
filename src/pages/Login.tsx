@@ -36,7 +36,7 @@ const Login = () => {
   }
   return (
     <div className="flex justify-center">
-      <div className="w-1/3 min-w-[300px]">
+      <div className="w-1/3 min-w-[320px]">
         <Card>
           <CardBody>
             <div className="flex flex-col gap-5 p-5">
