@@ -33,6 +33,7 @@ export default function NavBar() {
   const { isAuthenticated, user, logout } = useUser()
   const navigate = useNavigate()
   const handleLogout = async () => {
+    setIsMenuOpen(false)
     try {
       const res = await logout()
       addToast({
