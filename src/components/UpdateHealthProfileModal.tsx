@@ -20,7 +20,6 @@ import {
   updateHealthProfileSchema,
 } from '@/validations/updateHealthProfileValidation'
 import { chronicConditions } from '@/pages/PaitentCompleteProfile'
-import { Form } from 'react-router-dom'
 
 export default function UpdateHealthProfileModal() {
   const { user, updateHealthProfile, isUpdatingHealthProfile } = useUser()
@@ -98,7 +97,7 @@ export default function UpdateHealthProfileModal() {
       >
         <ModalContent>
           {(onClose) => (
-            <Form
+            <form
               onSubmit={handleSubmit(onSubmit)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -198,7 +197,7 @@ export default function UpdateHealthProfileModal() {
                   </Button>
                 </ModalFooter>
               </div>
-            </Form>
+            </form>
           )}
         </ModalContent>
       </Modal>
