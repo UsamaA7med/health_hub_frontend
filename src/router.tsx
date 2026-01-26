@@ -21,6 +21,8 @@ import CheckAuth from './CheckAuth'
 import ScrollToTop from './ScrollToTop'
 import MyProfile from './pages/MyProfile'
 import MyAppointments from './pages/MyAppointments'
+import PreVisitPage from './pages/PreVisitPage'
+import MyMedicalHistory from './pages/MyMedicalHistory'
 const Router = createBrowserRouter([
   {
     path: '/',
@@ -66,6 +68,14 @@ const Router = createBrowserRouter([
       {
         path: '/my-appointments',
         element: <MyAppointments />,
+      },
+      {
+        path: '/pre-visit-information',
+        element: <PreVisitPage />,
+      },
+      {
+        path: '/my-medical-history',
+        element: <MyMedicalHistory />,
       },
     ],
   },

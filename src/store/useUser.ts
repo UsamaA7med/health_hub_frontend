@@ -11,7 +11,7 @@ interface UserStore {
         _id: string
         profileImage: { url: string; public_id: string }
         fullName: string
-        healthProfile: TCompleteProfile
+        healthProfile: TCompleteProfile & { _id: string }
       })
 
   isAuthenticated: boolean
@@ -22,6 +22,7 @@ interface UserStore {
   isUpdatingProfile: boolean
   isCheckingAuth: boolean
   isCompletingProfile: boolean
+  isUpdatingHealthProfile: boolean
   isCompleted: boolean
   login: (user: {
     email: string
@@ -47,6 +48,10 @@ interface UserStore {
   updateProfile: (
     data: FormData
   ) => Promise<{ message: string; success: boolean }>
+  updateHealthProfile: (
+    data: any,
+    id: string
+  ) => Promise<{ message: string; success: boolean }>
 }
 
 export const useUser = create<UserStore>((set) => ({
@@ -60,6 +65,7 @@ export const useUser = create<UserStore>((set) => ({
   isCompletingProfile: false,
   isUpdatingDoctorProfile: false,
   isCompleted: false,
+  isUpdatingHealthProfile: false,
   login: async (data) => {
     try {
       set({ isLoggingIn: true })
@@ -287,6 +293,39 @@ export const useUser = create<UserStore>((set) => ({
       }
     } finally {
       set({ isUpdatingProfile: false })
+    }
+  },
+  updateHealthProfile: async (data, id) => {
+    try {
+      set({ isUpdatingHealthProfile: true })
+      const res = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/healthProfile/update/${id}`,
+        data,
+        {
+          withCredentials: true,
+        }
+      )
+      set({
+        user: res.data.data,
+      })
+      return {
+        message: 'Health profile updated successfully',
+        success: true,
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        return {
+          message: error.response?.data.message,
+          success: false,
+        }
+      } else {
+        return {
+          message: 'Something went wrong',
+          success: false,
+        }
+      }
+    } finally {
+      set({ isUpdatingHealthProfile: false })
     }
   },
 }))

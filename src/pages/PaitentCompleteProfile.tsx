@@ -19,7 +19,7 @@ const lifeStyles = [
   { name: 'Sedentary', value: 'sedentary' },
 ]
 
-const chronicConditions = [
+export const chronicConditions = [
   { name: 'Diabetes', value: 'diabetes' },
   { name: 'Hypertension', value: 'hypertension' },
   { name: 'Heart Disease', value: 'heart-disease' },

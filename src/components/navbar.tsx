@@ -176,6 +176,12 @@ export default function NavBar() {
                 My Profile
               </DropdownItem>
               <DropdownItem
+                key="medical-history"
+                onPress={() => navigate('/my-medical-history')}
+              >
+                My Medical History
+              </DropdownItem>
+              <DropdownItem
                 key="appointments"
                 onPress={() => navigate('/my-appointments')}
               >
