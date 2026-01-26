@@ -98,7 +98,14 @@ export default function UpdateHealthProfileModal() {
       >
         <ModalContent>
           {(onClose) => (
-            <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form
+              onSubmit={handleSubmit(onSubmit)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                }
+              }}
+            >
               <div className="w-full">
                 <ModalHeader className="flex flex-col gap-1">
                   Update Health Profile
