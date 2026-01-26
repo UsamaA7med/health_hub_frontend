@@ -70,7 +70,12 @@ export default function UpdateHealthProfileModal() {
       <Button onPress={onOpen} color="primary" className="text-white w-fit">
         Edit Health Profile
       </Button>
-      <Modal backdrop="opaque" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
         <ModalContent>
           {(onClose) => (
             <form
