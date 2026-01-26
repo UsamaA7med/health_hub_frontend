@@ -70,31 +70,7 @@ export default function UpdateHealthProfileModal() {
       <Button onPress={onOpen} color="primary" className="text-white w-fit">
         Edit Health Profile
       </Button>
-      <Modal
-        backdrop="opaque"
-        isOpen={isOpen}
-        motionProps={{
-          variants: {
-            enter: {
-              y: 0,
-              opacity: 1,
-              transition: {
-                duration: 0.3,
-                ease: 'easeOut',
-              },
-            },
-            exit: {
-              y: -20,
-              opacity: 0,
-              transition: {
-                duration: 0.2,
-                ease: 'easeIn',
-              },
-            },
-          },
-        }}
-        onOpenChange={onOpenChange}
-      >
+      <Modal backdrop="opaque" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <form
@@ -117,34 +93,38 @@ export default function UpdateHealthProfileModal() {
                       const selected = field.value ?? []
                       const isNoneSelected = selected.includes('none')
                       return (
-                        <Select
-                          label="Chronic Conditions"
-                          labelPlacement="outside"
-                          placeholder="Select your chronic conditions"
-                          selectionMode="multiple"
-                          selectedKeys={selected}
-                          onSelectionChange={(keys) => {
-                            const values = Array.from(keys) as string[]
-                            if (values.includes('none')) {
-                              field.onChange(['none'])
-                            } else {
-                              field.onChange(values)
-                            }
-                          }}
-                          isInvalid={!!errors.chronicConditions}
-                          errorMessage={errors.chronicConditions?.root?.message}
-                        >
-                          {chronicConditions.map((condition) => (
-                            <SelectItem
-                              key={condition.value}
-                              isDisabled={
-                                isNoneSelected && condition.value !== 'none'
+                        <div onClick={(e) => e.stopPropagation()}>
+                          <Select
+                            label="Chronic Conditions"
+                            labelPlacement="outside"
+                            placeholder="Select your chronic conditions"
+                            selectionMode="multiple"
+                            selectedKeys={selected}
+                            onSelectionChange={(keys) => {
+                              const values = Array.from(keys) as string[]
+                              if (values.includes('none')) {
+                                field.onChange(['none'])
+                              } else {
+                                field.onChange(values)
                               }
-                            >
-                              {condition.name}
-                            </SelectItem>
-                          ))}
-                        </Select>
+                            }}
+                            isInvalid={!!errors.chronicConditions}
+                            errorMessage={
+                              errors.chronicConditions?.root?.message
+                            }
+                          >
+                            {chronicConditions.map((condition) => (
+                              <SelectItem
+                                key={condition.value}
+                                isDisabled={
+                                  isNoneSelected && condition.value !== 'none'
+                                }
+                              >
+                                {condition.name}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                        </div>
                       )
                     }}
                   />
