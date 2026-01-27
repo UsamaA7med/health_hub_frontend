@@ -11,7 +11,7 @@ const Home = () => {
   const { user } = useUser()
   useEffect(() => {
     createChat({
-      webhookUrl: `${import.meta.env.CHATBOT_URL}`,
+      webhookUrl: `https://n8n.datacraft.in.net/webhook/8430493e-70d8-4c7d-8d31-90508ba45fe6/chat`,
       metadata: {
         userID: user?._id,
       },
