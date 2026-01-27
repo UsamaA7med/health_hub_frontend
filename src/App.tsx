@@ -9,14 +9,16 @@ import { useUser } from './store/useUser'
 
 const Home = () => {
   const { user } = useUser()
-  useEffect(() => {
-    createChat({
-      webhookUrl: `https://n8n.datacraft.in.net/webhook/8430493e-70d8-4c7d-8d31-90508ba45fe6/chat`,
-      metadata: {
-        userID: user?._id,
-      },
-    })
-  }, [])
+  if (user) {
+    useEffect(() => {
+      createChat({
+        webhookUrl: `https://n8n.datacraft.in.net/webhook/8430493e-70d8-4c7d-8d31-90508ba45fe6/chat`,
+        metadata: {
+          userID: user?._id,
+        },
+      })
+    }, [])
+  }
   return (
     <div className="flex flex-col gap-20">
       <HeroSection />
