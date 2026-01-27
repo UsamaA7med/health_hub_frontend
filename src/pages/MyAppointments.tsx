@@ -59,37 +59,46 @@ const MyAppointments = () => {
           <div className="flex flex-col gap-10">
             {appointments?.map((i) => (
               <div key={i._id} className="flex flex-col gap-3">
-                <div className="flex justify-between">
-                  <div className="flex  gap-3">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
+                  <div className="flex gap-3 flex-1">
                     <Image
                       src={i.doctor.image.url}
-                      className="w-40 h-40 bg-[#D9D9D9]"
+                      className="w-22 h-full sm:w-34 sm:h-34 lg:w-40 lg:h-40 min-w-[80px] sm:min-w-[100px] flex-shrink-0 bg-[#D9D9D9] object-cover rounded-lg"
                     />
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-2 sm:gap-3 flex-1 min-w-0">
                       <div>
-                        <p className="font-bold">{i.doctor.name}</p>
-                        <p className="text-gray-500 text-sm">
+                        <p className="font-bold text-sm sm:text-base truncate">
+                          {i.doctor.name}
+                        </p>
+                        <p className="text-gray-500 text-xs sm:text-sm">
                           {i.doctor.speciality}
                         </p>
                       </div>
-                      <div className="text-gray-500 text-sm">
+                      <div className="text-gray-500 text-xs sm:text-sm">
                         <p className="font-bold">Address:</p>
-                        <p>{i.doctor.addressOne}</p>
-                        <p>{i.doctor.addressTwo}</p>
+                        <p className="break-words">{i.doctor.addressOne}</p>
+                        <p className="break-words">{i.doctor.addressTwo}</p>
                       </div>
-                      <p className="text-gray-500 text-sm">
-                        <span className="font-bold">Date& time: </span>
-                        {`${formatDate(i.date)} | ${i.time}`}
+                      <p className="text-gray-500 text-xs sm:text-sm">
+                        <span className="font-bold">Date & time: </span>
+                        <span className="break-words">
+                          {`${formatDate(i.date)} | ${i.time}`}
+                        </span>
                       </p>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-3 justify-end">
-                    <Button color="primary" className="text-white">
+
+                  <div className="flex flex-row sm:flex-col gap-2 sm:gap-3 sm:justify-end sm:min-w-[160px]">
+                    <Button
+                      color="primary"
+                      className="text-white flex-1 sm:flex-none text-sm sm:text-base"
+                    >
                       Pay here
                     </Button>
                     <Button
                       variant="ghost"
                       color="danger"
+                      className="flex-1 sm:flex-none text-sm sm:text-base"
                       isLoading={
                         isCancelingAppointment && currentCancelId === i._id
                       }
