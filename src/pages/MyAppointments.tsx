@@ -1,3 +1,4 @@
+import Empty from '@/components/lottie/Empty'
 import { useAppointment } from '@/store/useAppointment'
 import formatDate from '@/utils/formatDate'
 import { addToast, Button, Divider, Image } from '@heroui/react'
@@ -47,55 +48,63 @@ const MyAppointments = () => {
   }
   return (
     <div className="flex flex-col gap-3">
-      <p>My Appointments</p>
-      <Divider />
-      <div className="flex flex-col gap-10">
-        {appointments?.map((i) => (
-          <div key={i._id} className="flex flex-col gap-3">
-            <div className="flex justify-between">
-              <div className="flex  gap-3">
-                <Image
-                  src={i.doctor.image.url}
-                  className="w-40 h-40 bg-[#D9D9D9]"
-                />
-                <div className="flex flex-col gap-3">
-                  <div>
-                    <p className="font-bold">{i.doctor.name}</p>
-                    <p className="text-gray-500 text-sm">
-                      {i.doctor.speciality}
-                    </p>
+      {appointments?.length === 0 ? (
+        <div className="flex justify-center">
+          <Empty />
+        </div>
+      ) : (
+        <>
+          <p>My Appointments</p>
+          <Divider />
+          <div className="flex flex-col gap-10">
+            {appointments?.map((i) => (
+              <div key={i._id} className="flex flex-col gap-3">
+                <div className="flex justify-between">
+                  <div className="flex  gap-3">
+                    <Image
+                      src={i.doctor.image.url}
+                      className="w-40 h-40 bg-[#D9D9D9]"
+                    />
+                    <div className="flex flex-col gap-3">
+                      <div>
+                        <p className="font-bold">{i.doctor.name}</p>
+                        <p className="text-gray-500 text-sm">
+                          {i.doctor.speciality}
+                        </p>
+                      </div>
+                      <div className="text-gray-500 text-sm">
+                        <p className="font-bold">Address:</p>
+                        <p>{i.doctor.addressOne}</p>
+                        <p>{i.doctor.addressTwo}</p>
+                      </div>
+                      <p className="text-gray-500 text-sm">
+                        <span className="font-bold">Date& time: </span>
+                        {`${formatDate(i.date)} | ${i.time}`}
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-gray-500 text-sm">
-                    <p className="font-bold">Address:</p>
-                    <p>{i.doctor.addressOne}</p>
-                    <p>{i.doctor.addressTwo}</p>
+                  <div className="flex flex-col gap-3 justify-end">
+                    <Button color="primary" className="text-white">
+                      Pay here
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      color="danger"
+                      isLoading={
+                        isCancelingAppointment && currentCancelId === i._id
+                      }
+                      onPress={() => handelCancelAppointment(i._id)}
+                    >
+                      Cancel Appointment
+                    </Button>
                   </div>
-                  <p className="text-gray-500 text-sm">
-                    <span className="font-bold">Date& time: </span>
-                    {`${formatDate(i.date)} | ${i.time}`}
-                  </p>
                 </div>
+                <Divider />
               </div>
-              <div className="flex flex-col gap-3 justify-end">
-                <Button color="primary" className="text-white">
-                  Pay here
-                </Button>
-                <Button
-                  variant="ghost"
-                  color="danger"
-                  isLoading={
-                    isCancelingAppointment && currentCancelId === i._id
-                  }
-                  onPress={() => handelCancelAppointment(i._id)}
-                >
-                  Cancel Appointment
-                </Button>
-              </div>
-            </div>
-            <Divider />
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   )
 }

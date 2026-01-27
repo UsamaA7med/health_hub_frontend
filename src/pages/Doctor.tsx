@@ -84,6 +84,7 @@ const Doctor = () => {
         })
         setSelectedDay(null)
         setSelectedHour(null)
+        navigate('/my-appointments')
       } else {
         addToast({
           title: 'Error',
