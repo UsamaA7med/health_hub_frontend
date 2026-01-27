@@ -15,7 +15,7 @@ const TopDoctorsSection = () => {
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5 mt-10">
-        {doctors?.map((i) => (
+        {doctors?.slice(0, 5).map((i) => (
           <div key={i._id} onClick={() => navigate('/doctor/' + i._id)}>
             <DoctorCard
               name={i.name}

@@ -133,11 +133,11 @@ const Doctor = () => {
 
   return (
     <div className="flex flex-col gap-20">
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-6 items-stretch">
-        <div className="col-span-1 w-full">
+      <div className="md:grid grid-cols-1 flex flex-col  gap-5 md:grid-cols-6 ">
+        <div className="md:col-span-1 flex justify-center  w-full">
           <Image
             alt="Doctor"
-            className="w-full h-[250px] object-cover rounded-xl bg-primary"
+            className="w-full md:h-[250px] object-cover rounded-xl bg-primary"
             src={doctor?.image?.url}
           />
         </div>
@@ -245,6 +245,7 @@ const Doctor = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5 mt-10">
           {relatedDoctors
+            .slice(0, 5)
             ?.filter((i) => i._id !== id)
             .map((doctor) => (
               <motion.div
