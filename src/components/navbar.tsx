@@ -124,6 +124,30 @@ export default function NavBar() {
                   PROFILE
                 </Link>
               </NavbarMenuItem>
+              <NavbarMenuItem key={`medical-history`}>
+                <Link
+                  as={RouterLink}
+                  className="w-full"
+                  color="foreground"
+                  to={'/my-medical-history'}
+                  size="lg"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  MEDICAL HISTORY
+                </Link>
+              </NavbarMenuItem>
+              <NavbarMenuItem key={`appointments`}>
+                <Link
+                  as={RouterLink}
+                  className="w-full"
+                  color="foreground"
+                  to={'/my-appointments'}
+                  size="lg"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  APPOINTMENTS
+                </Link>
+              </NavbarMenuItem>
               <NavbarMenuItem key={`logout`}>
                 <Button color="danger" onPress={handleLogout}>
                   Logout
