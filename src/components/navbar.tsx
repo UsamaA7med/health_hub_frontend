@@ -197,19 +197,19 @@ export default function NavBar() {
                 key="profile"
                 onPress={() => navigate('/my-profile')}
               >
-                My Profile
+                Profile
               </DropdownItem>
               <DropdownItem
                 key="medical-history"
                 onPress={() => navigate('/my-medical-history')}
               >
-                My Medical History
+                Medical History
               </DropdownItem>
               <DropdownItem
                 key="appointments"
                 onPress={() => navigate('/my-appointments')}
               >
-                My Appointments
+                Appointments
               </DropdownItem>
               <DropdownItem key="logout" color="danger" onPress={handleLogout}>
                 Log Out
