@@ -3,6 +3,7 @@ import { useAppointment } from '@/store/useAppointment'
 import formatDate from '@/utils/formatDate'
 import { addToast, Button, Divider, Image } from '@heroui/react'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const MyAppointments = () => {
   const {
@@ -12,9 +13,11 @@ const MyAppointments = () => {
     getAppointments,
   } = useAppointment()
   const [currentCancelId, setCurrentCancelId] = useState<string | null>(null)
+  const navigate = useNavigate()
   useEffect(() => {
     getAppointments()
   }, [])
+  console.log(appointments)
   const handelCancelAppointment = async (id: string) => {
     setCurrentCancelId(id)
     try {
@@ -89,6 +92,19 @@ const MyAppointments = () => {
                   </div>
 
                   <div className="flex flex-row sm:flex-col gap-2 sm:gap-3 sm:justify-end sm:min-w-[160px]">
+                    {!i.preVisitInfo ? (
+                      <Button
+                        onPress={() => navigate(`/pre-visit/${i._id}`)}
+                        color="warning"
+                        className="text-white"
+                      >
+                        pre-visit information
+                      </Button>
+                    ) : (
+                      <Button color="success" disabled className="text-white">
+                        pre-visit completed
+                      </Button>
+                    )}
                     <Button
                       color="primary"
                       className="text-white flex-1 sm:flex-none text-sm sm:text-base"

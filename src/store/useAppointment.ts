@@ -23,6 +23,12 @@ type TAppointment = {
 type TPopulatedAppointment = TAppointment & {
   _id: string
   doctor: TPopulatedDoctor
+  preVisitInfo: {
+    reasons: string
+    howLong: string
+    currentMedications: string
+    tests: { url: string; public_id: string }
+  }
   user: TUpdateUserSchema & { _id: string; healthProfile: TCompleteProfile }
 }
 
@@ -30,6 +36,7 @@ type TAppointmentStore = {
   isCreatingAppointment: boolean
   isCancelingAppointment: boolean
   isLoadingDoctorAppointments: boolean
+  isCompletingPreVisitInfo: boolean
   appointments: TPopulatedAppointment[] | null
   allAppointments: TPopulatedAppointment[] | null
   doctorAppointments: TPopulatedAppointment[] | null
@@ -52,12 +59,17 @@ type TAppointmentStore = {
   ) => Promise<{ message: string; success: boolean }>
   doctorTotalEarnings: () => Promise<{ data: string | null; success: boolean }>
   doctorTotalPatients: () => Promise<{ data: string | null; success: boolean }>
+  completePreVistInfo: (
+    data: any,
+    id: string
+  ) => Promise<{ message: string; success: boolean }>
 }
 
 export const useAppointment = create<TAppointmentStore>((set) => ({
   isCreatingAppointment: false,
   isCancelingAppointment: false,
   isLoadingDoctorAppointments: false,
+  isCompletingPreVisitInfo: false,
   appointments: null,
   allAppointments: null,
   doctorAppointments: null,
@@ -307,6 +319,35 @@ export const useAppointment = create<TAppointmentStore>((set) => ({
       } else {
         return {
           data: null,
+          success: false,
+        }
+      }
+    }
+  },
+  completePreVistInfo: async (data, id) => {
+    try {
+      set({ isCompletingPreVisitInfo: true })
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/appointment/preVisit/${id}`,
+        data,
+        {
+          withCredentials: true,
+        }
+      )
+      set({ appointments: res.data.data, isCompletingPreVisitInfo: false })
+      return {
+        message: 'Pre visit info completed successfully',
+        success: true,
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        return {
+          message: error.response?.data.message,
+          success: false,
+        }
+      } else {
+        return {
+          message: 'Something went wrong',
           success: false,
         }
       }

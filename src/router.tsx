@@ -70,7 +70,7 @@ const Router = createBrowserRouter([
         element: <MyAppointments />,
       },
       {
-        path: '/pre-visit-information',
+        path: '/pre-visit/:id',
         element: <PreVisitPage />,
       },
       {
