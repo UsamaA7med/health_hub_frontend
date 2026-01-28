@@ -34,9 +34,11 @@ const CheckAuth = ({ children }: { children: React.ReactNode }) => {
       pathname.includes('/doctor-panel') ||
       pathname.includes('/complete-profile') ||
       pathname.includes('/my-profile') ||
-      pathname.includes('/my-appointments'))
+      pathname.includes('/my-appointments') ||
+      pathname.includes('/my-medical-history') ||
+      pathname.includes('/pre-visit'))
   ) {
-    return <Navigate to="/login" />
+    return <Navigate to="/" />
   }
 
   if (

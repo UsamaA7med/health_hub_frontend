@@ -2,23 +2,56 @@ import HeroSection from '@/components/homeComponents/HeroSection'
 import SecondHero from '@/components/homeComponents/SecondHero'
 import SpecialitySection from '@/components/homeComponents/SpecialitySection'
 import TopDoctorsSection from '@/components/homeComponents/TopDoctorsSection'
-import { useEffect } from 'react'
-import '@n8n/chat/style.css'
+import { useEffect, useRef } from 'react'
 import { createChat } from '@n8n/chat'
 import { useUser } from './store/useUser'
+import './styles/n8nStyles.css'
+import '@n8n/chat/style.css'
 
 const Home = () => {
   const { user } = useUser()
-  if (user) {
-    useEffect(() => {
-      createChat({
-        webhookUrl: `https://n8n.datacraft.in.net/webhook/8430493e-70d8-4c7d-8d31-90508ba45fe6/chat`,
-        metadata: {
-          userID: user?._id,
+  const initializedRef = useRef(false)
+
+  useEffect(() => {
+    if (!user) {
+      document
+        .querySelectorAll(
+          '#n8n-chat, iframe[src*="n8n"], div[class*="n8n"], div[id*="n8n"]'
+        )
+        .forEach((el) => el.remove())
+      return
+    }
+
+    if (initializedRef.current) return
+
+    initializedRef.current = true
+
+    createChat({
+      webhookUrl: import.meta.env.VITE_N8N_WEBHOOK_URL,
+      metadata: {
+        userID: user._id,
+      },
+      target: '#n8n-chat',
+      mode: 'window',
+      chatInputKey: 'chatInput',
+      chatSessionKey: 'sessionId',
+      loadPreviousSession: true,
+      showWelcomeScreen: false,
+      defaultLanguage: 'en',
+      initialMessages: ['Welcome to HealthHub! How can I help you today?'],
+      i18n: {
+        en: {
+          title: 'HealthHub Chatbot 🤖',
+          subtitle: '',
+          footer: '',
+          getStarted: 'New Conversation',
+          inputPlaceholder: 'Type your question..',
+          closeButtonTooltip: 'Close chat',
         },
-      })
-    }, [])
-  }
+      },
+      enableStreaming: false,
+    })
+  }, [user])
   return (
     <div className="flex flex-col gap-20">
       <HeroSection />
