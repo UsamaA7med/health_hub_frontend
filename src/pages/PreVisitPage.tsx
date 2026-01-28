@@ -4,7 +4,7 @@ import {
   TCompletePrevisitInfoSchema,
 } from '@/validations/completePrevisitInfoValidation'
 import { Input, Textarea } from '@heroui/input'
-import { addToast, Button, Checkbox, form } from '@heroui/react'
+import { addToast, Button, Checkbox } from '@heroui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
