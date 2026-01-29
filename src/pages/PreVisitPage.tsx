@@ -116,7 +116,12 @@ const PreVisitPage = () => {
             I agree to share this information with the doctor.
           </Checkbox>
           <div className="flex justify-end gap-3">
-            <Button variant="bordered">skip</Button>
+            <Button
+              variant="bordered"
+              onPress={() => navigate('/my-appointments')}
+            >
+              skip
+            </Button>
             <Button
               color="primary"
               type="submit"
