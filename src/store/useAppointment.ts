@@ -37,9 +37,11 @@ type TAppointmentStore = {
   isCancelingAppointment: boolean
   isLoadingDoctorAppointments: boolean
   isCompletingPreVisitInfo: boolean
+  isGettingAppointment: boolean
   appointments: TPopulatedAppointment[] | null
   allAppointments: TPopulatedAppointment[] | null
   doctorAppointments: TPopulatedAppointment[] | null
+  appointment: TPopulatedAppointment | null
   createAppointment: (
     data: any
   ) => Promise<{ message: string; success: boolean }>
@@ -63,6 +65,7 @@ type TAppointmentStore = {
     data: any,
     id: string
   ) => Promise<{ message: string; success: boolean }>
+  getAppointment: (id: string) => Promise<{ message: string; success: boolean }>
 }
 
 export const useAppointment = create<TAppointmentStore>((set) => ({
@@ -70,9 +73,11 @@ export const useAppointment = create<TAppointmentStore>((set) => ({
   isCancelingAppointment: false,
   isLoadingDoctorAppointments: false,
   isCompletingPreVisitInfo: false,
+  isGettingAppointment: false,
   appointments: null,
   allAppointments: null,
   doctorAppointments: null,
+  appointment: null,
   createAppointment: async (data) => {
     try {
       set({ isCreatingAppointment: true })
@@ -337,6 +342,34 @@ export const useAppointment = create<TAppointmentStore>((set) => ({
       set({ appointments: res.data.data, isCompletingPreVisitInfo: false })
       return {
         message: 'Pre visit info completed successfully',
+        success: true,
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        return {
+          message: error.response?.data.message,
+          success: false,
+        }
+      } else {
+        return {
+          message: 'Something went wrong',
+          success: false,
+        }
+      }
+    }
+  },
+  getAppointment: async (id) => {
+    try {
+      set({ isGettingAppointment: true })
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/appointment/appointment/${id}`,
+        {
+          withCredentials: true,
+        }
+      )
+      set({ appointment: res.data.data, isGettingAppointment: false })
+      return {
+        message: 'Appointment fetched successfully',
         success: true,
       }
     } catch (error) {

@@ -2,6 +2,7 @@ import { useAppointment } from '@/store/useAppointment'
 import formatDate from '@/utils/formatDate'
 import { addToast, Avatar, Divider, Image, Spinner } from '@heroui/react'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const DoctorDashboard = () => {
   const {
@@ -14,6 +15,8 @@ const DoctorDashboard = () => {
   } = useAppointment()
   const [totalEarnings, setTotalEarnings] = useState<string | null>(null)
   const [totalPatients, setTotalPatients] = useState<string | null>(null)
+  const navigate = useNavigate()
+  console.log(doctorAppointments)
   useEffect(() => {
     const handleTotalEarnings = async () => {
       const res = await doctorTotalEarnings()
@@ -130,12 +133,17 @@ const DoctorDashboard = () => {
           <div className="flex flex-col gap-5">
             {doctorAppointments?.map((i) => (
               <div key={i._id} className="flex gap-3 items-center">
-                <Avatar src={i.user.profileImage.url} />
-                <div className="flex flex-col gap-1 flex-grow">
-                  <p className="font-bold">{i.user.fullName}</p>
-                  <p className="text-gray-500 text-sm">
-                    Booking on {formatDate(i.date)}
-                  </p>
+                <div
+                  onClick={() => navigate(`patient/${i._id}`)}
+                  className="flex gap-3 items-center flex-grow cursor-pointer"
+                >
+                  <Avatar src={i.user.profileImage.url} />
+                  <div className="flex flex-col gap-1 flex-grow">
+                    <p className="font-bold">{i.user.fullName}</p>
+                    <p className="text-gray-500 text-sm">
+                      Booking on {formatDate(i.date)}
+                    </p>
+                  </div>
                 </div>
                 <div className="flex gap-3 items-center">
                   {(i.status === 'pending' && (

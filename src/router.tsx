@@ -23,6 +23,7 @@ import MyProfile from './pages/MyProfile'
 import MyAppointments from './pages/MyAppointments'
 import PreVisitPage from './pages/PreVisitPage'
 import MyMedicalHistory from './pages/MyMedicalHistory'
+import PatiantDetails from './pages/PatientDetails'
 const Router = createBrowserRouter([
   {
     path: '/',
@@ -126,6 +127,10 @@ const Router = createBrowserRouter([
       {
         path: '/doctor-panel/profile',
         element: <DoctorProfile />,
+      },
+      {
+        path: '/doctor-panel/patient/:id',
+        element: <PatiantDetails />,
       },
     ],
   },
