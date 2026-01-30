@@ -4,7 +4,6 @@ import formatDate from '@/utils/formatDate'
 import { addToast, Button, Divider, Image } from '@heroui/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { loadStripe } from '@stripe/stripe-js'
 
 const MyAppointments = () => {
   const {
