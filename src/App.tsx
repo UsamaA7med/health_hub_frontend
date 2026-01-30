@@ -11,7 +11,6 @@ import '@n8n/chat/style.css'
 const Home = () => {
   const { user } = useUser()
   const initializedRef = useRef(false)
-
   useEffect(() => {
     if (!user) {
       document

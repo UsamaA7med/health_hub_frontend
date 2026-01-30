@@ -24,6 +24,7 @@ import MyAppointments from './pages/MyAppointments'
 import PreVisitPage from './pages/PreVisitPage'
 import MyMedicalHistory from './pages/MyMedicalHistory'
 import PatiantDetails from './pages/PatientDetails'
+import Checkout from './components/Checkout'
 const Router = createBrowserRouter([
   {
     path: '/',
@@ -77,6 +78,10 @@ const Router = createBrowserRouter([
       {
         path: '/my-medical-history',
         element: <MyMedicalHistory />,
+      },
+      {
+        path: '/payment',
+        element: <Checkout />,
       },
     ],
   },

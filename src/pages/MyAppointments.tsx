@@ -4,6 +4,7 @@ import formatDate from '@/utils/formatDate'
 import { addToast, Button, Divider, Image } from '@heroui/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { loadStripe } from '@stripe/stripe-js'
 
 const MyAppointments = () => {
   const {
@@ -108,6 +109,9 @@ const MyAppointments = () => {
                     <Button
                       color="primary"
                       className="text-white flex-1 sm:flex-none text-sm sm:text-base"
+                      onPress={() =>
+                        navigate(`/payment?amount=${i.doctor.fees}`)
+                      }
                     >
                       Pay here
                     </Button>
