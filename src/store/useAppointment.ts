@@ -18,6 +18,7 @@ type TAppointment = {
   day: string
   status: string
   paymentMethod: string
+  isPrevisitInfoCompleted: boolean
 }
 
 type TPopulatedAppointment = TAppointment & {
