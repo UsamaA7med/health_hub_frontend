@@ -5,6 +5,7 @@ import { create } from 'zustand'
 
 interface AdminStore {
   isCreatingDoctor: boolean
+  isGettingFilteredDoctors: boolean
   doctors: (TAddDoctorSchema & { available: boolean; _id: string })[] | null
   doctor: (TAddDoctorSchema & { available: boolean; _id: string }) | null
   createDoctor: (
@@ -23,6 +24,7 @@ interface AdminStore {
 
 export const useAdmin = create<AdminStore>((set) => ({
   isCreatingDoctor: false,
+  isGettingFilteredDoctors: false,
   doctors: null,
   doctor: null,
   createDoctor: async (data: TAddDoctorSchema) => {
@@ -105,6 +107,7 @@ export const useAdmin = create<AdminStore>((set) => ({
   },
   getFilteredDoctors: async (query) => {
     try {
+      set({ isGettingFilteredDoctors: true })
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/doctor/filterd-doctors?speciality=${query}`,
         {
@@ -122,6 +125,8 @@ export const useAdmin = create<AdminStore>((set) => ({
           data: null,
         }
       }
+    } finally {
+      set({ isGettingFilteredDoctors: false })
     }
   },
   getAllPatients: async () => {

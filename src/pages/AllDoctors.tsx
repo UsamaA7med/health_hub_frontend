@@ -3,11 +3,12 @@ import { spicialities } from '@/dummyData/dummy'
 import { useAdmin } from '@/store/useAdmin'
 import { TAddDoctorSchema } from '@/validations/addDoctorValidation'
 import { Button } from '@heroui/button'
+import { Spinner } from '@heroui/react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 const AllDoctors = () => {
-  const { getFilteredDoctors } = useAdmin()
+  const { getFilteredDoctors, isGettingFilteredDoctors } = useAdmin()
   const [searchParams, setSearchParams] = useSearchParams()
   const [active, setActive] = useState<string | null>(
     searchParams.get('speciality') || null
@@ -55,18 +56,24 @@ const AllDoctors = () => {
             </Button>
           ))}
         </div>
-        <div className="col-span-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {filteredDoctors?.map((i) => (
-            <div key={i._id} onClick={() => navigate('/doctor/' + i._id)}>
-              <DoctorCard
-                name={i.name}
-                image={i.image.url}
-                speciality={i.speciality}
-                available={i.available}
-              />
-            </div>
-          ))}
-        </div>
+        {isGettingFilteredDoctors ? (
+          <div className="col-span-4 flex justify-center items-center">
+            <Spinner variant="wave" />
+          </div>
+        ) : (
+          <div className="col-span-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            {filteredDoctors?.map((i) => (
+              <div key={i._id} onClick={() => navigate('/doctor/' + i._id)}>
+                <DoctorCard
+                  name={i.name}
+                  image={i.image.url}
+                  speciality={i.speciality}
+                  available={i.available}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
